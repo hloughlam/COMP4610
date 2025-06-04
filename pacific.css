@@ -1,0 +1,174 @@
+header, hgroup, nav, footer, figure, figcaption, aside, section, article {
+	display: block;
+}
+
+body {
+  background-color:#00569f;
+  background-image: url('ptrbackground.jpg');
+  background-position: top; 
+  color: #666666;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  padding-top: 40px; 
+
+
+}
+
+
+
+body h2{
+    font-family: Georgia, "Times New Roman", serif;
+    color: #3399cc;
+
+}
+
+
+#wrapper {
+  width: 80%;
+  min-width: 600px;
+  margin: auto;
+  background-color: #8dc6e4;
+}
+
+
+/* Header styling with sunset image */
+header {
+  background-color: #000033; 
+  background-image: url('sunset.jpg'); /* Path to sunset image */
+  background-repeat: no-repeat; 
+  background-size: 20%; 
+  background-position: right top; /* Keeps the image positioned at the right */
+  color: #ffffff; 
+  padding: 5px 0; /* Reduced padding */
+  width: 100%;
+  text-align: left; 
+  height: 40px;
+  
+}
+
+
+h1 {
+  margin: 0;
+  padding: 0 20px;
+  font-family: Georgia, serif;
+}
+
+/* Navigation bar styling */
+nav {
+    float: left; /* ensures nav is on left forcing elements to move to right */
+    padding-left: 10px;
+    margin-top: 0px;
+    background-color: #2596be
+
+l
+
+  }
+  
+/* Style for nav links */
+nav a {
+  text-decoration: none; /* Remove underline from links */
+  color: #000; 
+  border-radius: 5px; 
+  
+}
+
+
+
+nav a:hover {
+  color: #ffffff;
+}
+
+
+
+
+
+
+/* Ensure the nav ul list does not display any bullet points */
+nav ul {
+  list-style-type: none; /* Removes any default bullets */
+  list-style-image: none; /* Ensures no custom bullet images are applied */
+  padding: 0 auto; 
+  margin: 0 auto;
+  margin-top: 20px;
+
+
+}
+
+nav li {
+  margin-bottom: 0px; /* Reduces space between navigation items */
+
+
+
+}
+
+
+nav a {
+  text-decoration: none; /* Removes underlining */
+  color: #000033; /* Dark blue text */
+  font-weight: bold;
+  
+}
+
+/* Main content styling */
+#content {
+  background-color: white;
+  margin-left: 200px;
+  /* padding: 20px; */ 
+  /* padding-left: 10px; */
+  padding: 10px 20px 40px 10px;
+  min-height: auto;
+
+
+}
+  
+  #content img{
+    float: left; /* ensures image is on left forcing text to move to right */
+    width: 300px;
+    margin-right: 40px;
+    max-width: 100%; 
+    height: auto; 
+
+  
+  }
+
+
+h2 {
+  color: #3399cc;
+  font-family: Georgia, "Times New Roman", serif;
+  margin: 0px;
+  margin-top: 30px;
+  margin-left: 0px;
+  margin-bottom: 15px;
+}
+
+/* Bullet point styling */
+ul {
+  list-style-image: url('marker.gif');
+  padding-left: 30px;
+  list-style-position: outside;
+}
+
+.resort {
+  color: #6B8EBF;
+  font-weight: bold;
+}
+
+#contact {
+  font-size: 90%;
+  /* margin-left: 600px; */
+}
+
+/* Footer styling */
+
+footer {
+  /* grid-column: 1; */
+  /* grid-row: 5; */
+  background-color: white;
+  text-align: left;
+  font-size: 0.75em;
+  font-style: italic;
+  padding: 10px;
+  color: #666666; 
+  margin-left: 200px;
+}
