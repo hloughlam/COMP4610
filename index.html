@@ -1,0 +1,104 @@
+
+<!--
+File: index.html
+GUI Assignment: HW 2 Creating Your A Dynamic Multplication Table
+Author: Hajar Loughlam, Student of Computer Science at UMass Lowell
+Contact: hajar_loughlam@student.uml.edu
+Date: June 15th, 2025
+Description: . 
+
+I got help from:
+- For color codes: https://htmlcolorcodes.com/
+- For vertical nav bar: https://www.w3schools.com/html/html_css.asp
+- For icons: https://www.w3schools.com/howto/howto_css_social_media_buttons.asp
+- For icons and background inspo: https://www.youtube.com/watch?v=ecvmB0HH5MM&ab_channel=HaydnCo
+- For smooth-scrolling feature: https://stackoverflow.com/questions/24739126/scroll-to-a-specific-element-using-html
+- For fonts: https://www.w3schools.com/cssref/tryit.php?filename=trycss_font_courier
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic Multiplication Table</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <h1>Multiplication Table Generator</h1>
+  <form id="table-form">
+    <label>Start Row: <input type="number" id="start-row" required /></label>
+    <label>End Row: <input type="number" id="end-row" required /></label>
+    <label>Start Column: <input type="number" id="start-col" required /></label>
+    <label>End Column: <input type="number" id="end-col" required /></label>
+    <button type="submit">Generate Table</button>
+    <div id="error-msg" class="error"></div>
+  </form>
+
+  <div id="table-container"></div>
+
+  <script>
+    // Form submission handler
+    document.getElementById("table-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const startRow = parseInt(document.getElementById("start-row").value);
+      const endRow = parseInt(document.getElementById("end-row").value);
+      const startCol = parseInt(document.getElementById("start-col").value);
+      const endCol = parseInt(document.getElementById("end-col").value);
+      const errorMsg = document.getElementById("error-msg");
+      const container = document.getElementById("table-container");
+
+      errorMsg.textContent = "";
+      container.innerHTML = "";
+
+      // Validation
+      if (
+        [startRow, endRow, startCol, endCol].some(
+          val => isNaN(val) || val < -50 || val > 50
+        )
+      ) {
+        errorMsg.textContent = "Values must be between -50 and 50.";
+        return;
+      }
+
+      if (startRow > endRow || startCol > endCol) {
+        errorMsg.textContent = "Start values must not be greater than end values.";
+        return;
+      }
+
+      const table = document.createElement("table");
+      const thead = document.createElement("thead");
+      const tbody = document.createElement("tbody");
+
+      const headerRow = document.createElement("tr");
+      headerRow.appendChild(document.createElement("th"));
+
+      for (let j = startCol; j <= endCol; j++) {
+        const th = document.createElement("th");
+        th.textContent = j;
+        headerRow.appendChild(th);
+      }
+      thead.appendChild(headerRow);
+
+      for (let i = startRow; i <= endRow; i++) {
+        const row = document.createElement("tr");
+        const th = document.createElement("th");
+        th.textContent = i;
+        row.appendChild(th);
+
+        for (let j = startCol; j <= endCol; j++) {
+          const td = document.createElement("td");
+          td.textContent = i * j;
+          row.appendChild(td);
+        }
+        tbody.appendChild(row);
+      }
+
+      table.appendChild(thead);
+      table.appendChild(tbody);
+      container.appendChild(table);
+    });
+  </script>
+</body>
+</html>
