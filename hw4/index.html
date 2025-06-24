@@ -1,0 +1,185 @@
+
+<!--
+File: index.html
+GUI Assignment: HW 4 - jQuery UI and Validation
+Author: Hajar Loughlam, Student of Computer Science at UMass Lowell
+Contact: hajar_loughlam@student.uml.edu
+Description:
+  - Demonstrates jQuery Validation for form inputs
+  - Uses jQuery UI sliders with two-way binding to number fields
+  - Generates multiplication tables dynamically
+  - Displays each table in its own closable tab
+  - Supports deleting individual and multiple tabs
+-->
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HW4 - jQuery UI Multiplication Table</title>
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/smoothness/jquery-ui.css" />
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
+</head>
+<body>
+  <h1>Multiplication Table Generator</h1>
+  <form id="table-form">
+    <div>
+      <label>Start Row: 
+        <input type="number" id="start-row" name="start-row" required />
+        <div class="slider" id="slider-start-row"></div>
+      </label>
+
+      <label>End Row: 
+        <input type="number" id="end-row" name="end-row" required />
+        <div class="slider" id="slider-end-row"></div>
+      </label>
+
+      <label>Start Column: 
+        <input type="number" id="start-col" name="start-col" required />
+        <div class="slider" id="slider-start-col"></div>
+      </label>
+
+      <label>End Column: 
+        <input type="number" id="end-col" name="end-col" required />
+        <div class="slider" id="slider-end-col"></div>
+      </label>
+    </div>
+
+    <button type="submit">Generate Table</button>
+    <div id="error-msg" class="error"></div>
+  </form>
+
+  <div>
+    <button id="delete-selected">Delete Selected Tabs</button>
+  </div>
+
+  <div id="tabs">
+    <ul>
+      <li aria-controls="tab-starter"><a href="#tab-starter">Welcome</a></li>
+    </ul>
+    <div id="tab-starter"><p>Use the form above to generate tables.</p></div>
+  </div>
+
+  <script>
+    $(function () {
+      $("#tabs").tabs();
+
+      const tabTracker = {};
+
+      function syncSlider(inputId, sliderId) {
+        const $input = $("#" + inputId);
+        $("#" + sliderId).slider({
+          min: -50,
+          max: 50,
+          value: parseInt($input.val()) || 0,
+          slide: function (event, ui) {
+            $input.val(ui.value).trigger("input");
+          }
+        });
+        $input.on("input", function () {
+          const val = parseInt($input.val()) || 0;
+          $("#" + sliderId).slider("value", val);
+        });
+      }
+
+      function generateTable() {
+        const startRow = parseInt($("#start-row").val());
+        const endRow = parseInt($("#end-row").val());
+        const startCol = parseInt($("#start-col").val());
+        const endCol = parseInt($("#end-col").val());
+
+        if (startRow > endRow || startCol > endCol) {
+          $("#error-msg").text("Start values must not be greater than end values.");
+          return;
+        } else {
+          $("#error-msg").text("");
+        }
+
+        const table = $("<table></table>");
+        const thead = $("<thead></thead>");
+        const tbody = $("<tbody></tbody>");
+
+        const headerRow = $("<tr></tr>");
+        headerRow.append("<th></th>");
+        for (let j = startCol; j <= endCol; j++) {
+          headerRow.append($("<th></th>").text(j));
+        }
+        thead.append(headerRow);
+
+        for (let i = startRow; i <= endRow; i++) {
+          const row = $("<tr></tr>");
+          row.append($("<th></th>").text(i));
+          for (let j = startCol; j <= endCol; j++) {
+            row.append($("<td></td>").text(i * j));
+          }
+          tbody.append(row);
+        }
+
+        table.append(thead).append(tbody);
+
+        const tabId = "tab-" + Date.now();
+        const label = "(" + startRow + "," + endRow + ") x (" + startCol + "," + endCol + ")";
+        const li = $('<li aria-controls="' + tabId + '">' +
+                       '<input type="checkbox" class="tab-check" data-tab="' + tabId + '"/> ' +
+                       '<a href="#' + tabId + '">' + label + '</a> ' +
+                       '<span class="ui-icon ui-icon-close" role="presentation"></span>' +
+                     '</li>');
+        $("#tabs ul").append(li);
+        $("#tabs").append('<div id="' + tabId + '"></div>');
+        $("#" + tabId).append(table);
+        $("#tabs").tabs("refresh").tabs("option", "active", $("#tabs ul li").length - 1);
+        tabTracker[tabId] = li;
+      }
+
+      $("#tabs").on("click", "span.ui-icon-close", function () {
+        const panelId = $(this).closest("li").remove().attr("aria-controls");
+        $("#" + panelId).remove();
+        $("#tabs").tabs("refresh");
+      });
+
+      $("#delete-selected").click(function () {
+        $(".tab-check:checked").each(function () {
+          const tabId = $(this).data("tab");
+          tabTracker[tabId].remove();
+          $("#" + tabId).remove();
+          delete tabTracker[tabId];
+        });
+        $("#tabs").tabs("refresh");
+      });
+
+      syncSlider("start-row", "slider-start-row");
+      syncSlider("end-row", "slider-end-row");
+      syncSlider("start-col", "slider-start-col");
+      syncSlider("end-col", "slider-end-col");
+
+      $("#table-form").validate({
+        rules: {
+          "start-row": { required: true, number: true, range: [-50, 50] },
+          "end-row": { required: true, number: true, range: [-50, 50] },
+          "start-col": { required: true, number: true, range: [-50, 50] },
+          "end-col": { required: true, number: true, range: [-50, 50] }
+        },
+        messages: {
+          "start-row": "Please enter a number between -50 and 50.",
+          "end-row": "Please enter a number between -50 and 50.",
+          "start-col": "Please enter a number between -50 and 50.",
+          "end-col": "Please enter a number between -50 and 50."
+        },
+        errorPlacement: function (error, element) {
+          error.insertAfter(element);
+        },
+        submitHandler: function (form, event) {
+          event.preventDefault();
+          generateTable();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
