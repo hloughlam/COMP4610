@@ -1,0 +1,49 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+#board-container {
+  position: relative;
+  width: 1129px;
+  height: 80px;
+  margin: 20px auto;
+  background: url('../graphics_data/Scrabble_Board_OneLine.png') no-repeat;
+  background-size: contain;
+}
+
+.drop-zone {
+  position: absolute;
+  width: 75px;
+  height: 75px;
+  top: 2px;
+  border: 2px dashed transparent;
+}
+
+#rack {
+  width: 640px;
+  height: 182px;
+  background: url('../graphics_data/scrabble-tile-holder-406774_640.png') no-repeat;
+  background-size: contain;
+  margin: 20px auto;
+  position: relative;
+}
+
+.rack-slot {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  top: 60px;
+}
+
+.tile {
+  width: 60px;
+  height: 60px;
+  background-image: url('../graphics_data/Scrabble_LetterTiles.png');
+  background-size: 600% 6%;
+  cursor: grab;
+}
+
+#controls {
+  margin-top: 20px;
+}
